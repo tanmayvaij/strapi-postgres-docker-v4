@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  postgres-dbms:
+    image: postgres
+    container_name: postgres-dbms
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres-dbms-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: tanmayvaij
+      POSTGRES_PASSWORD: 12345678
+      POSTGRES_DB: strapi-cms-db
+
+  strapi-cms:
+    build: .
+    container_name: strapi-cms
+    ports:
+      - 1337:1337
+    volumes:
+      - ./strapi-cms:/srv/app
+    depends_on:
+      - postgres-dbms
+    environment:
+      DATABASE_CLIENT: postgres
+      DATABASE_HOST: postgres-dbms
+      DATABASE_PORT: 5432
+      DATABASE_NAME: strapi-cms-db
+      DATABASE_USERNAME: tanmayvaij
+      DATABASE_PASSWORD: 12345678
+      HOST: 0.0.0.0
+      PORT: 1337
+      APP_KEYS: "89uw5g9w20g9205,095w2g90j20j909j2"
+      API_TOKEN_SALT: w09u5g0wg9jgsngekonognwsngo
+      ADMIN_JWT_SECRET: tobeosijrgjw0ew90jvrmodified
+      TRANSFER_TOKEN_SALT: e20910498qwjh9g0sjtoinxzsb9tiw
+      JWT_SECRET: tj0w9jg0j9e4ojgosgzse90a9w30j39r
+      NODE_ENV: production
+
+volumes:
+  postgres-dbms-data:
+
+networks:
+  default:
+    name: strapi-postgres-network
